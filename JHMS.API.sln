@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32929.385
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JHMS.API", "JHMS.API\JHMS.API.csproj", "{EEB60542-BC57-41B5-BD4A-41256ABC2286}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EEB60542-BC57-41B5-BD4A-41256ABC2286}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EEB60542-BC57-41B5-BD4A-41256ABC2286}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EEB60542-BC57-41B5-BD4A-41256ABC2286}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EEB60542-BC57-41B5-BD4A-41256ABC2286}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C7DE7893-D06F-4988-8F03-16EFC8D34BBC}
+	EndGlobalSection
+EndGlobal
