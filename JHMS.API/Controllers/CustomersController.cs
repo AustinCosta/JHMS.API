@@ -69,5 +69,23 @@ namespace JHMS.API.Controllers
 			return Ok(customer);
 		}
 
+		[HttpDelete]
+		[Route("{id:}")]
+		public async Task<IActionResult> DeleteCustomer([FromRoute] string id)
+		{
+			var intCustomerID = Int32.Parse(id);
+			var customer = await _jhmsDbContext.TCustomers.FindAsync(intCustomerID);
+
+			if(customer == null)
+			{ 
+				return NotFound();
+			}
+
+			_jhmsDbContext.TCustomers.Remove(customer);
+			await _jhmsDbContext.SaveChangesAsync();
+
+			return Ok(customer);
+		}
+
 	}
 }
