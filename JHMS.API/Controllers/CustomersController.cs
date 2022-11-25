@@ -62,7 +62,14 @@ namespace JHMS.API.Controllers
 				NotFound();
 			}
 
-			customer.strCustomerName = updateCustomerRequest.strCustomerName;
+			customer.strFirstName = updateCustomerRequest.strFirstName;
+			customer.strLastName = updateCustomerRequest.strLastName;
+			customer.strAddress = updateCustomerRequest.strAddress; 
+			customer.strCity = updateCustomerRequest.strCity;
+			customer.strState = updateCustomerRequest.strState;
+			customer.strZip = updateCustomerRequest.strZip;
+			customer.strEmail = updateCustomerRequest.strEmail;
+
 
 			await _jhmsDbContext.SaveChangesAsync();
 
