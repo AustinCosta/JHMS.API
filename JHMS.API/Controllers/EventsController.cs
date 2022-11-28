@@ -89,7 +89,7 @@ namespace JHMS.API.Controllers
 		{
 			var intEventID = Int32.Parse(id);
 
-			//All tables that have EventID as a FK -- Must delete from these tables first!!!
+			//All tables that have EventID as a FK
 			var dbevent = await _jhmsDbContext.TEvents.FindAsync(intEventID);
 
 			//Check for an event with corresponding id
@@ -98,6 +98,33 @@ namespace JHMS.API.Controllers
 				return NotFound();
 			}
 
+			//Delete all foreign keys first
+
+			// EventBounceHouses
+			await _jhmsDbContext.Database.ExecuteSqlInterpolatedAsync($"DELETE FROM TEventBounceHouses WHERE intEventID = {intEventID}"); //Delete from EventBounceHouses
+			await _jhmsDbContext.SaveChangesAsync();
+
+			// EventEmployees
+			await _jhmsDbContext.Database.ExecuteSqlInterpolatedAsync($"DELETE FROM TEventEmployees WHERE intEventID = {intEventID}"); //Delete from EventEmployees
+			await _jhmsDbContext.SaveChangesAsync();
+
+			// EventEnvironmentTypes
+			await _jhmsDbContext.Database.ExecuteSqlInterpolatedAsync($"DELETE FROM TEventEnvironmentTypes WHERE intEventID = {intEventID}"); //Delete from EventEnvironmentTypes
+			await _jhmsDbContext.SaveChangesAsync();
+
+			// EventEquipments
+			await _jhmsDbContext.Database.ExecuteSqlInterpolatedAsync($"DELETE FROM TEventEquipments WHERE intEventID = {intEventID}"); //Delete from EventEquipments
+			await _jhmsDbContext.SaveChangesAsync();
+
+			// EventVehicles
+			await _jhmsDbContext.Database.ExecuteSqlInterpolatedAsync($"DELETE FROM TEventVehicles WHERE intEventID = {intEventID}"); //Delete from EventVehicles
+			await _jhmsDbContext.SaveChangesAsync();
+
+			//Delete the event
+			_jhmsDbContext.TEvents.Remove(dbevent);
+			await _jhmsDbContext.SaveChangesAsync();
+
+			//Return the event
 			return Ok(dbevent);
 
 		}
