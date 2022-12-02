@@ -41,6 +41,7 @@ namespace JHMS.API.Controllers
 									where TE.intEventID == intEventID
 									select new
 									{
+										intEventBounceHouseID = TEB.intEventBounceHouseID,
 										intBounceHouseID = TB.intBounceHouseID,
 										strBounceHouseName = TB.strBounceHouseName,
 										intEmployeesNeededForSetup = TB.intEmployeesNeededForSetup,
@@ -51,42 +52,22 @@ namespace JHMS.API.Controllers
 			return Ok(eventBounceHouses);
 		}
 
-		[HttpPost]
+		[HttpDelete]
 		[Route("{id:}")]
-		public async Task<IActionResult> GetUnavailableBouncehouses([FromRoute] string id, EventDates dateParams)
+		public async Task<IActionResult> DeleteEventBounceHouse ([FromRoute] string id)
 		{
-			//Check for the event...
-			var intEventID = Int32.Parse(id);
-			var dbevent = await _jhmsDbContext.TEvents.FirstOrDefaultAsync(x => x.intEventID == intEventID);
+			var intEventBounceHouseID = Int32.Parse(id);
+			var bounceHouse = await _jhmsDbContext.TEventBounceHouses.FindAsync(intEventBounceHouseID);
 
-			//Store event dates for the query
-			string strStartDate = dateParams.strStartDate;
-			string strEndDate = dateParams.strEndDate;
-
-			//Parse String dates to DateTime
-			DateTime dteStartDate = DateTime.Parse(strStartDate);
-			DateTime dteEndDate = DateTime.Parse(strEndDate);
-
-			if (dbevent == null)
+			if (bounceHouse == null)
 			{
 				return NotFound();
 			}
 
-			//LINQ join
-			var bounceHouse = from TBH in _jhmsDbContext.TBounceHouses
-								from TEBH in _jhmsDbContext.TEventBounceHouses
-								from TE in _jhmsDbContext.TEvents
-								where TBH.intBounceHouseID == TEBH.intBounceHouseID
-								where TE.intEventID == TEBH.intEventID
-								where TE.intEventID != intEventID
-								where TE.dteEventStartDate == dteStartDate
-							  select new
-								{
-									bhID = TEBH.intBounceHouseID
-								};
-			
+			_jhmsDbContext.TEventBounceHouses.Remove(bounceHouse);
+			await _jhmsDbContext.SaveChangesAsync();
 
-			return Ok(bounceHouse);
+			return Ok(intEventBounceHouseID);
 		}
 
 	}

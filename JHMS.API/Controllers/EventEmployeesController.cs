@@ -39,6 +39,7 @@ namespace JHMS.API.Controllers
 								  where TEv.intEventID == intEventID
 								  select new
 								  {
+									  intEventEmployeeID = TEE.intEventEmployeeID,
 									  intEmployeeID = TE.intEmployeeID,
 									  strFirstName = TE.strFirstName,
 									  strLastName = TE.strLastName,
@@ -48,6 +49,25 @@ namespace JHMS.API.Controllers
 								  };
 
 			return Ok(eventEmployees);
+		}
+
+
+		[HttpDelete]
+		[Route("{id:}")]
+		public async Task<IActionResult> DeleteEventEmployee([FromRoute] string id)
+		{
+			var intEventEmployeeID = Int32.Parse(id);
+			var eventEmployee = await _jhmsDbContext.TEventEmployees.FindAsync(intEventEmployeeID);
+
+			if (eventEmployee == null)
+			{
+				return NotFound();
+			}
+
+			_jhmsDbContext.TEventEmployees.Remove(eventEmployee);
+			await _jhmsDbContext.SaveChangesAsync();
+
+			return Ok(eventEmployee);
 		}
 	}
 }
