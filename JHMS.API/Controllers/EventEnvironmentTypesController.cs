@@ -39,11 +39,30 @@ namespace JHMS.API.Controllers
 									where TE.intEventID == intEventID
 									select new
 									{
+										intEventEnvironmentTypeID = TEE.intEventEnvironmentTypeID,
 										intEnvironmentTypeID = TET.intEnvironmentTypeID,
 										strEnvironmentType = TET.strEnvironmentType,
 									};
 
 			return Ok(eventEnvironments);
+		}
+
+		[HttpDelete]
+		[Route("{id:}")]
+		public async Task<IActionResult> DeleteEventEnvironmentType([FromRoute] string id)
+		{
+			var intEventEnvironmentTypeID = Int32.Parse(id);
+			var environmentType = await _jhmsDbContext.TEventEnvironmentTypes.FindAsync(intEventEnvironmentTypeID);
+
+			if (environmentType == null)
+			{
+				return NotFound();
+			}
+
+			_jhmsDbContext.TEventEnvironmentTypes.Remove(environmentType);
+			await _jhmsDbContext.SaveChangesAsync();
+
+			return Ok(environmentType);
 		}
 
 	}
