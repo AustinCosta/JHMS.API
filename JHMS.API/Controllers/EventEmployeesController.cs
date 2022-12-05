@@ -1,4 +1,5 @@
 ﻿using JHMS.API.Data;
+using JHMS.API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -68,6 +69,15 @@ namespace JHMS.API.Controllers
 			await _jhmsDbContext.SaveChangesAsync();
 
 			return Ok(eventEmployee);
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> AddEventEmployee([FromBody] EventEmployee addEmployeeRequest)
+		{
+			await _jhmsDbContext.TEventEmployees.AddAsync(addEmployeeRequest);
+			await _jhmsDbContext.SaveChangesAsync();
+
+			return Ok(addEmployeeRequest);
 		}
 	}
 }

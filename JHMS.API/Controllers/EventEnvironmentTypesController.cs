@@ -1,4 +1,5 @@
 ﻿using JHMS.API.Data;
+using JHMS.API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -63,6 +64,15 @@ namespace JHMS.API.Controllers
 			await _jhmsDbContext.SaveChangesAsync();
 
 			return Ok(environmentType);
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> AddEventEnvironment([FromBody] EventEnvironmentType eventEnvironmentType)
+		{
+			await _jhmsDbContext.TEventEnvironmentTypes.AddAsync(eventEnvironmentType);
+			await _jhmsDbContext.SaveChangesAsync();
+
+			return Ok(eventEnvironmentType);
 		}
 
 	}

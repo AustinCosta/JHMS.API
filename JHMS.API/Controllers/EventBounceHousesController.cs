@@ -70,5 +70,53 @@ namespace JHMS.API.Controllers
 			return Ok(intEventBounceHouseID);
 		}
 
+		//Get Available BounceHouses
+		[HttpGet]
+		[Route("{id:}/{strStartDate:}/{strEndDate:}")]
+		public async Task<IActionResult> GetAvailableBounceHouses([FromRoute] string id, [FromRoute] string strStartDate, [FromRoute] string strEndDate)
+		{
+			//Get the Event ID
+			var intEventID = Int32.Parse(id);
+			var dbevent = await _jhmsDbContext.TEvents.FirstOrDefaultAsync(x => x.intEventID == intEventID);
+
+			//Parse dates from string/url
+			DateTime dteEventStartDate = DateTime.Parse(strStartDate);
+			DateTime dteEventEndDate = DateTime.Parse(strEndDate);
+
+			//Check that event exists
+			if (dbevent == null)
+			{
+				return NotFound();
+			}
+
+			var allInflatables = from TB in _jhmsDbContext.TBounceHouses select new { intBounceHouseID = TB.intBounceHouseID, strBounceHouseName = TB.strBounceHouseName };
+
+			//Get vehicles for the event ID passed in
+			var eventBounceHouses = from TE in _jhmsDbContext.TEvents
+									from TEB in _jhmsDbContext.TEventBounceHouses
+									from TB in _jhmsDbContext.TBounceHouses
+									where TE.intEventID == TEB.intEventID
+									where TB.intBounceHouseID == TEB.intBounceHouseID
+									where TE.dteEventStartDate >= dteEventStartDate && TE.dteEventEndDate <= dteEventEndDate
+									select new
+									{
+										intBounceHouseID = TB.intBounceHouseID,
+										strBounceHouseName = TB.strBounceHouseName,
+									};
+
+			var available = allInflatables.Except(eventBounceHouses);
+
+			return Ok(available);
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> AddBounceHouse([FromBody] EventBounceHouse addBounceHouseRequest)
+		{
+			await _jhmsDbContext.TEventBounceHouses.AddAsync(addBounceHouseRequest);
+			await _jhmsDbContext.SaveChangesAsync();
+
+			return Ok(addBounceHouseRequest);
+		}
+
 	}
 }

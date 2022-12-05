@@ -1,4 +1,5 @@
 ﻿using JHMS.API.Data;
+using JHMS.API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -39,12 +40,42 @@ namespace JHMS.API.Controllers
 									where TE.intEventID == intEventID
 									select new
 									{
+										intEventEquipmentID = TEE.intEventEquipmentID,
 										intEquipmentID = TEq.intEquipmentID,
 										strEquipmentName = TEq.strEquipmentName,
 										strDescription = TEq.strDescription,
 									};
 
 			return Ok(eventEquipments);
+		}
+
+
+		[HttpDelete]
+		[Route("{id:}")]
+		public async Task<IActionResult> DeleteEventEquipment([FromRoute] string id)
+		{
+			var intEventEquipmentID = Int32.Parse(id);
+			var eventEquipment = await _jhmsDbContext.TEventEquipments.FindAsync(intEventEquipmentID);
+
+			if (eventEquipment == null)
+			{
+				return NotFound();
+			}
+
+			_jhmsDbContext.TEventEquipments.Remove(eventEquipment);
+			await _jhmsDbContext.SaveChangesAsync();
+
+			return Ok(eventEquipment);
+		}
+
+
+		[HttpPost]
+		public async Task<IActionResult> AddEquipment([FromBody] EventEquipment addEquipmentRequest)
+		{
+			await _jhmsDbContext.TEventEquipments.AddAsync(addEquipmentRequest);
+			await _jhmsDbContext.SaveChangesAsync();
+
+			return Ok(addEquipmentRequest);
 		}
 
 	}
