@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace JHMS.API.Controllers
 {
@@ -48,7 +49,27 @@ namespace JHMS.API.Controllers
 				return NotFound();
 			}
 
-			return Ok(dbevent);
+			var eventData = from TE in _jhmsDbContext.TEvents
+							where TE.intEventID == intEventID
+							select new 
+							{
+								intEventID = TE.intEventID,
+								strEventType = TE.strEventType,
+								intCustomerID = TE.intCustomerID,
+								intEnvironmentTypeID = TE.intEnvironmentTypeID,
+								strEventStartDate = TE.dteEventStartDate.ToString(),
+								strEventEndDate = TE.dteEventEndDate.ToString(),
+								strEventName = TE.strEventName,
+								strEventStartTime = TE.strEventStartTime,
+								strEventEndTime = TE.strEventEndTime,
+								strEventSetupTime = TE.strEventSetupTime,
+								strEventDescription = TE.strEventDescription,
+								intInflatablesNeeded = TE.intInflatablesNeeded,
+								intEmployeesForTheEvent = TE.intEmployeesForTheEvent,
+								strLocation = TE.strLocation,
+							};
+
+			return Ok(eventData);
 		}
 
 		[HttpPut]
