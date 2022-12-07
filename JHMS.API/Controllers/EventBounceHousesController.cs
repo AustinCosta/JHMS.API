@@ -89,7 +89,11 @@ namespace JHMS.API.Controllers
 				return NotFound();
 			}
 
-			var allInflatables = from TB in _jhmsDbContext.TBounceHouses select new { intBounceHouseID = TB.intBounceHouseID, strBounceHouseName = TB.strBounceHouseName };
+			var allInflatables = from TB in _jhmsDbContext.TBounceHouses select new { 
+																						intBounceHouseID = TB.intBounceHouseID, 
+																						strBounceHouseName = TB.strBounceHouseName,
+																						strBounceHouseType = TB.intBounceHouseTypeID
+																					};
 
 			//Get vehicles for the event ID passed in
 			var eventBounceHouses = from TE in _jhmsDbContext.TEvents
@@ -102,6 +106,7 @@ namespace JHMS.API.Controllers
 									{
 										intBounceHouseID = TB.intBounceHouseID,
 										strBounceHouseName = TB.strBounceHouseName,
+										strBounceHouseType = TB.intBounceHouseTypeID
 									};
 
 			var available = allInflatables.Except(eventBounceHouses);
