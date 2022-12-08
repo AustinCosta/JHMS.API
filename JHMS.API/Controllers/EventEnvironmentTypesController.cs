@@ -16,6 +16,16 @@ namespace JHMS.API.Controllers
 			_jhmsDbContext = jhmsDbContext;
 		}
 
+		//Get environment types
+		[HttpGet]
+		public async Task<IActionResult> GetEnvironmentTypes()
+		{
+			var environmentTypes = await _jhmsDbContext.TEnvironmentTypes.ToListAsync();
+
+			return Ok(environmentTypes);
+		}
+
+
 		//Get Event Environments
 		[HttpGet]
 		[Route("{id:}")]
