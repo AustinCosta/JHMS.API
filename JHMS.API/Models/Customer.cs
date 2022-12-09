@@ -12,6 +12,7 @@ namespace JHMS.API.Models
 		public string strCity { get; set; }
 		public string strState { get; set; }
 		public string strZip { get; set; }
+		public string strPhoneNumber { get; set; }
 		public string strEmail { get; set; }
 	}
 }

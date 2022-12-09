@@ -68,6 +68,7 @@ namespace JHMS.API.Controllers
 			customer.strCity = updateCustomerRequest.strCity;
 			customer.strState = updateCustomerRequest.strState;
 			customer.strZip = updateCustomerRequest.strZip;
+			customer.strPhoneNumber = updateCustomerRequest.strPhoneNumber;
 			customer.strEmail = updateCustomerRequest.strEmail;
 
 
